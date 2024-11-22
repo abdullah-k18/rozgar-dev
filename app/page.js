@@ -1,101 +1,199 @@
+import {
+  Brain,
+  FileText,
+  CircleEqual,
+  Search,
+  Upload,
+  CircleCheckBig,
+} from "lucide-react";
+import AppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import Typography from "@mui/material/Typography";
+import Container from "@mui/material/Container";
 import Image from "next/image";
+import Grid from "@mui/material/Grid";
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.js
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const features = [
+    {
+      id: 1,
+      logo: <Brain size={30} className="mx-auto text-[#4b8b93]" />,
+      title: "AI Job Recommendations",
+      description:
+        "Get personalized job matches based on your skills and experience with real-time updates.",
+    },
+    {
+      id: 2,
+      logo: <FileText size={30} className="mx-auto text-[#4b8b93]" />,
+      title: "Resume Scoring & ATS Optimization",
+      description:
+        "Advanced ATS compatibility check with detailed improvement suggestions.",
+    },
+    {
+      id: 3,
+      logo: <CircleEqual size={30} className="mx-auto text-[#4b8b93]" />,
+      title: "Job Description Match",
+      description:
+        "Real-time resume comparison with job posts and skills gap analysis.",
+    },
+    {
+      id: 4,
+      logo: <Search size={30} className="mx-auto text-[#4b8b93]" />,
+      title: "AI-Powered Job Search",
+      description:
+        "Natural language search capabilities with smart filters for industry and role.",
+    },
+  ];
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+  const howItWorks = [
+    {
+      id: 1,
+      logo: <Upload size={30} className="mx-auto text-black" />,
+      title: "Upload Your Resume",
+      description: "Quick profile creation with instant skills analysis.",
+    },
+    {
+      id: 2,
+      logo: <CircleEqual size={30} className="mx-auto text-black" />,
+      title: "Get Matched",
+      description: "AI-curated job recommendations and personalized alerts.",
+    },
+    {
+      id: 3,
+      logo: <CircleCheckBig size={30} className="mx-auto text-black" />,
+      title: "Apply Confidently",
+      description:
+        "Optimized application materials with higher response rates.",
+    },
+  ];
+
+  return (
+    <div className="bg-white text-gray-800 min-h-screen">
+      <section
+        id="home"
+        className="flex justify-center items-center py-12 h-screen"
+      >
+        <Container>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+            <div>
+              <Typography
+                variant="h3"
+                className="text-black font-bold mb-6"
+                sx={{
+                  fontSize: { xs: "1.8rem", md: "2.5rem", lg: "3rem" },
+                  fontWeight: "bolder",
+                }}
+              >
+                Transform Your Job Search with{" "}
+                <span className="bg-gradient-to-r from-[#4b8b93] to-[#8d5227] text-transparent bg-clip-text">
+                  AI-Powered
+                </span>{" "}
+                Precision
+              </Typography>
+
+              <Typography
+                variant="body1"
+                className="text-gray-700"
+                sx={{ fontSize: { xs: "1rem", md: "1.2rem" } }}
+              >
+                Let our intelligent platform match you with perfect
+                opportunities while optimizing your career materials for
+                success.
+              </Typography>
+            </div>
+
+            <div className="relative w-full h-80 lg:h-96 bg-[#4b8b93] rounded-full">
+              <Image
+                src="/logo.png"
+                alt="AI Job Search"
+                layout="fill"
+                objectFit="contain"
+              />
+            </div>
+          </div>
+        </Container>
+      </section>
+
+      <section
+        id="features"
+        className="bg-gray-100 py-12 h-auto lg:h-screen flex justify-center items-center"
+      >
+        <Container>
+          <Typography
+            variant="h3"
+            className="text-center text-black font-bold mb-12"
+            sx={{ fontSize: { xs: "2rem", md: "2.5rem", lg: "3rem" } }}
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            Key Features
+          </Typography>
+
+          <Grid
+            container
+            spacing={4}
+            justifyContent="center"
+            className="flex-wrap"
           >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+            {features.map(({ id, logo, title, description }) => (
+              <Grid item xs={12} sm={6} md={3} key={id}>
+                <Card className="bg-white shadow-lg rounded-lg h-60 lg:w-75">
+                  <CardContent className="text-center p-6">
+                    {logo}
+                    <Typography
+                      variant="h6"
+                      className="text-black font-semibold mt-4"
+                    >
+                      {title}
+                    </Typography>
+                    <Typography variant="body2" className="text-gray-700 mt-2">
+                      {description}
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </Grid>
+            ))}
+          </Grid>
+        </Container>
+      </section>
+
+      <section
+        id="how-it-works"
+        className="bg-white py-12 lg:h-screen flex justify-center items-center"
+      >
+        <Container>
+          <Typography
+            variant="h3"
+            className="text-center text-black font-bold mb-12"
+            sx={{ fontSize: { xs: "2rem", md: "2.5rem", lg: "3rem" } }}
+          >
+            How It Works
+          </Typography>
+
+          <Grid container spacing={4} justifyContent="center">
+            {howItWorks.map(({ id, logo, title, description }) => (
+              <Grid item xs={12} sm={6} md={4} key={id}>
+                <Card className="bg-white shadow-none rounded-lg h-60">
+                  <CardContent className="text-center p-6">
+                    <div className="bg-gray-100 rounded-full p-3 inline-flex justify-center items-center">
+                      {logo}
+                    </div>
+                    <Typography
+                      variant="h5"
+                      className="text-black font-semibold mt-4"
+                    >
+                      {title}
+                    </Typography>
+                    <Typography variant="body1" className="text-gray-700 mt-2">
+                      {description}
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </Grid>
+            ))}
+          </Grid>
+        </Container>
+      </section>
     </div>
   );
 }
