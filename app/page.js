@@ -5,15 +5,11 @@ import {
   Search,
   Upload,
   CircleCheckBig,
+  Linkedin 
 } from "lucide-react";
-import AppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import Typography from "@mui/material/Typography";
-import Container from "@mui/material/Container";
 import Image from "next/image";
-import Grid from "@mui/material/Grid";
+import { Card, CardContent, Typography, Container, Grid, AppBar, Toolbar, Button } from "@mui/material";
+import Link from "next/link";
 
 export default function Home() {
   const features = [
@@ -71,9 +67,76 @@ export default function Home() {
 
   return (
     <div className="bg-white text-gray-800 min-h-screen">
+      <AppBar
+      sx={{
+        backgroundColor: "white",
+        color: "black",
+        boxShadow: "none",
+        position: { xs: "relative", lg: "fixed" }, 
+      }}
+      className="border-b "
+    >
+      <Container>
+        <Toolbar disableGutters className="flex justify-between">
+          <Link href="#home" passHref>
+          <Typography
+            variant="h6"
+            component="div"
+            sx={{ fontWeight: "800", fontSize: "1.5rem" }}
+            className="bg-gradient-to-r from-[#4b8b93] to-[#8d5227] text-transparent bg-clip-text cursor-pointer"
+          >
+            ROZGAR
+          </Typography>
+          </Link>
+
+          <div className="sm:flex hidden space-x-6">
+            <Link href="#home" passHref>
+              <Typography
+                variant="body1"
+                className="cursor-pointer hover:underline"
+              >
+                Home
+              </Typography>
+            </Link>
+            <Link href="#features" passHref>
+              <Typography
+                variant="body1"
+                className="cursor-pointer hover:underline"
+              >
+                Features
+              </Typography>
+            </Link>
+            <Link href="#how-it-works" passHref>
+              <Typography
+                variant="body1"
+                className="cursor-pointer hover:underline"
+              >
+                How It Works
+              </Typography>
+            </Link>
+          </div>
+
+          <Button
+            variant="contained"
+            sx={{
+              backgroundColor: "#4b8b93",
+              color: "white",
+              fontWeight: "bold",
+              textTransform: "none",
+              "&:hover": {
+                backgroundColor: "#397a7f",
+              },
+            }}
+          >
+            Join Waitlist
+          </Button>
+        </Toolbar>
+      </Container>
+    </AppBar>
+
       <section
         id="home"
-        className="flex justify-center items-center py-12 h-screen"
+        className="flex justify-center items-center py-12 mt-12 h-auto lg:h-screen lg:mt-0"
       >
         <Container>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
@@ -194,6 +257,68 @@ export default function Home() {
           </Grid>
         </Container>
       </section>
+
+      <footer className="bg-[#4b8b93] text-white py-12">
+      <Container>
+        <div className="text-center mb-6">
+          <Typography
+            variant="h4"
+            className="font-bold"
+            sx={{ fontSize: { xs: "1.8rem", md: "2.5rem" } }}
+          >
+            Ready to Transform Your Job Search
+          </Typography>
+        </div>
+
+        <div className="text-center mb-8">
+          <Typography
+            variant="body1"
+            className="text-gray-100"
+            sx={{ fontSize: { xs: "1rem", md: "1.2rem" } }}
+          >
+            Join thousands of successful job seekers who found their dream
+            positions through Rozgar&apos;s AI-powered platform.
+          </Typography>
+        </div>
+
+        <div className="text-center mb-10">
+          <Button
+            variant="contained"
+            sx={{
+              backgroundColor: "#ffffff",
+              color: "#4b8b93",
+              textTransform: "none",
+              fontWeight: "bold",
+              "&:hover": {
+                backgroundColor: "#f3f3f3",
+              },
+            }}
+          >
+            Join Waitlist
+          </Button>
+        </div>
+
+        <div className="flex flex-col sm:flex-row justify-between items-center border-t border-gray-300 pt-6">
+          <Typography
+            variant="body2"
+            className="text-gray-300 text-center sm:text-left mb-4 sm:mb-0"
+          >
+            &copy; 2024 Rozgar. All rights reserved.
+          </Typography>
+
+          <div className="flex items-center space-x-2">
+            <Link
+              href="https://www.linkedin.com/company/rozgar-organization"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gray-300 hover:text-white"
+            >
+              <Linkedin size={24} />
+            </Link>
+          </div>
+        </div>
+      </Container>
+    </footer>
     </div>
   );
 }
