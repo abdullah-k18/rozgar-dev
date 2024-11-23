@@ -304,7 +304,8 @@ export default function Home() {
         <div className="flex flex-col sm:flex-row justify-between items-center border-t border-gray-300 pt-6">
           <Typography
             variant="body2"
-            className="text-gray-300 text-center sm:text-left mb-4 sm:mb-0"
+            className="text-gray-300 text-center sm:text-left"
+            sx={{ marginBottom: "1rem" }}
           >
             &copy; 2024 Rozgar. All rights reserved.
           </Typography>
