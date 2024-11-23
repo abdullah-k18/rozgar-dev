@@ -10,6 +10,7 @@ import {
 import Image from "next/image";
 import { Card, CardContent, Typography, Container, Grid, AppBar, Toolbar, Button } from "@mui/material";
 import Link from "next/link";
+import { BorderRightRounded, Padding } from "@mui/icons-material";
 
 export default function Home() {
   const features = [
@@ -143,10 +144,11 @@ export default function Home() {
             <div>
               <Typography
                 variant="h3"
-                className="text-black font-bold mb-6"
+                className="text-black font-bold"
                 sx={{
                   fontSize: { xs: "1.8rem", md: "2.5rem", lg: "3rem" },
                   fontWeight: "bolder",
+                  marginBottom: "1rem"
                 }}
               >
                 Transform Your Job Search with{" "}
@@ -186,8 +188,8 @@ export default function Home() {
         <Container>
           <Typography
             variant="h3"
-            className="text-center text-black font-bold mb-12"
-            sx={{ fontSize: { xs: "2rem", md: "2.5rem", lg: "3rem" } }}
+            className="text-center text-black"
+            sx={{ fontSize: { xs: "2rem", md: "2.5rem", lg: "3rem" }, fontWeight: "bolder", marginBottom: "3.5rem" }}
           >
             Key Features
           </Typography>
@@ -200,16 +202,17 @@ export default function Home() {
           >
             {features.map(({ id, logo, title, description }) => (
               <Grid item xs={12} sm={6} md={3} key={id}>
-                <Card className="bg-white shadow-lg rounded-lg h-60 lg:w-75">
-                  <CardContent className="text-center p-6">
+                <Card className="bg-white h-60 lg:w-75" sx={{ boxShadow: 3, borderRadius: "lg" }}>
+                  <CardContent className="text-center" sx={{ padding: 3 }}>
                     {logo}
                     <Typography
                       variant="h6"
-                      className="text-black font-semibold mt-4"
+                      className="text-black"
+                      sx={{ fontWeight: "bold", marginTop: "1rem" }}
                     >
                       {title}
                     </Typography>
-                    <Typography variant="body2" className="text-gray-700 mt-2">
+                    <Typography variant="body2" className="text-gray-700" sx={{ marginTop: "1rem"}}>
                       {description}
                     </Typography>
                   </CardContent>
@@ -227,8 +230,8 @@ export default function Home() {
         <Container>
           <Typography
             variant="h3"
-            className="text-center text-black font-bold mb-12"
-            sx={{ fontSize: { xs: "2rem", md: "2.5rem", lg: "3rem" } }}
+            className="text-center text-black mb-12"
+            sx={{ fontSize: { xs: "2rem", md: "2.5rem", lg: "3rem" }, fontWeight: "bolder", marginBottom: "3.5rem" }}
           >
             How It Works
           </Typography>
@@ -236,18 +239,19 @@ export default function Home() {
           <Grid container spacing={4} justifyContent="center">
             {howItWorks.map(({ id, logo, title, description }) => (
               <Grid item xs={12} sm={6} md={4} key={id}>
-                <Card className="bg-white shadow-none rounded-lg h-60">
+                <Card className="bg-white h-60" sx={{ boxShadow: "none" }}>
                   <CardContent className="text-center p-6">
                     <div className="bg-gray-100 rounded-full p-3 inline-flex justify-center items-center">
                       {logo}
                     </div>
                     <Typography
                       variant="h5"
-                      className="text-black font-semibold mt-4"
+                      className="text-black mt-4"
+                      sx={{ fontWeight: "bold", marginTop: "1rem"}}
                     >
                       {title}
                     </Typography>
-                    <Typography variant="body1" className="text-gray-700 mt-2">
+                    <Typography variant="body1" className="text-gray-700" sx={{marginTop: "1rem"}}>
                       {description}
                     </Typography>
                   </CardContent>
@@ -263,8 +267,7 @@ export default function Home() {
         <div className="text-center mb-6">
           <Typography
             variant="h4"
-            className="font-bold"
-            sx={{ fontSize: { xs: "1.8rem", md: "2.5rem" } }}
+            sx={{ fontSize: { xs: "1.8rem", md: "2.5rem", fontWeight: "bold" } }}
           >
             Ready to Transform Your Job Search
           </Typography>
