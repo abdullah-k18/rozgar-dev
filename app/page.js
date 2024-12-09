@@ -19,6 +19,7 @@ import {
   AppBar,
   Toolbar,
   Button,
+  Box,
 } from "@mui/material";
 import { useState, useEffect } from "react";
 import Link from "next/link";
@@ -236,8 +237,9 @@ export default function Home() {
         <Container>
           <Typography
             variant="h3"
-            className="text-center text-black"
             sx={{
+              textAlign: "center",
+              color: "black",
               fontSize: { xs: "2rem", md: "2.5rem", lg: "3rem" },
               fontWeight: "bolder",
               marginBottom: "3.5rem",
@@ -246,38 +248,51 @@ export default function Home() {
             Key Features
           </Typography>
 
-          <Grid
-            container
-            spacing={4}
-            justifyContent="center"
-            className="flex-wrap"
-          >
+          <Grid container spacing={4} justifyContent="center">
             {features.map(({ id, logo, title, description }, index) => (
               <Grid item xs={12} sm={6} md={3} key={id}>
                 <Card
-                  className={`h-60 lg:w-75 transition duration-500 cursor-pointer ${
-                    activeFeature === index
-                      ? "bg-[#4b8b93] text-white"
-                      : "bg-white"
-                  }`}
                   sx={{
+                    height: "16rem",
+                    width: "100%",
+                    maxWidth: "300px",
+                    transition: "background-color 0.5s ease, color 0.5s ease",
+                    backgroundColor:
+                      activeFeature === index ? "#4b8b93" : "#ffffff",
+                    color: activeFeature === index ? "white" : "black",
                     boxShadow: 3,
-                    borderRadius: "xl",
+                    borderRadius: "10px",
+                    cursor: "pointer",
                   }}
                 >
-                  <CardContent className="text-center" sx={{ padding: 3 }}>
-                    <div
-                      className={`rounded-full p-3 inline-flex justify-center items-center ${
-                        activeFeature === index ? "bg-white" : "bg-gray-50"
-                      }`}
+                  <CardContent
+                    sx={{
+                      textAlign: "center",
+                      padding: 3,
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        borderRadius: "50%",
+                        padding: 2,
+                        display: "inline-flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        backgroundColor:
+                          activeFeature === index
+                            ? "white"
+                            : "rgb(243, 244, 246)",
+                        transition: "background-color 0.5s ease",
+                      }}
                     >
                       {logo}
-                    </div>
+                    </Box>
                     <Typography
                       variant="h6"
-                      className="font-bold"
                       sx={{
-                        marginTop: 1,
+                        fontWeight: "bold",
+                        marginTop: 2,
+                        transition: "color 0.5s ease",
                         color: activeFeature === index ? "white" : "black",
                       }}
                     >
@@ -285,9 +300,9 @@ export default function Home() {
                     </Typography>
                     <Typography
                       variant="body2"
-                      className="transition duration-500"
                       sx={{
                         marginTop: 1,
+                        transition: "color 0.5s ease",
                         color: activeFeature === index ? "white" : "gray",
                       }}
                     >
