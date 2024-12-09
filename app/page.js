@@ -220,7 +220,7 @@ export default function Home() {
 
             <div className="relative w-full h-80 lg:h-96 rounded-full">
               <Image
-                src="/logoo.png"
+                src="/logo.png"
                 alt="AI Job Search"
                 layout="fill"
                 objectFit="contain"
