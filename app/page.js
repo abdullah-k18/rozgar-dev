@@ -88,6 +88,8 @@ export default function Home() {
     },
   ];
 
+  const isLargeScreen = useMediaQuery("(min-width:600px)");
+
   return (
     <div className="bg-white text-gray-800 min-h-screen">
       <AppBar
@@ -254,7 +256,6 @@ export default function Home() {
             alignItems="center"
           >
             {features.map(({ id, logo, title, description }, index) => {
-              const isLargeScreen = useMediaQuery("(min-width:600px)"); // Screen size check
               const isActive = isLargeScreen && activeFeature === index;
 
               return (
