@@ -10,6 +10,7 @@ import {
   Linkedin,
 } from "lucide-react";
 import Image from "next/image";
+import { useMediaQuery } from "@mui/material";
 import {
   Card,
   CardContent,
@@ -167,7 +168,6 @@ export default function Home() {
           </Toolbar>
         </Container>
       </AppBar>
-
       <section
         id="home"
         className="flex justify-center items-center py-12 mt-12 h-auto lg:h-screen lg:mt-0"
@@ -229,7 +229,6 @@ export default function Home() {
           </div>
         </Container>
       </section>
-
       <section
         id="features"
         className="bg-gray-50 py-12 h-auto lg:h-screen flex justify-center items-center"
@@ -248,74 +247,94 @@ export default function Home() {
             Key Features
           </Typography>
 
-          <Grid container spacing={4} justifyContent="center">
-            {features.map(({ id, logo, title, description }, index) => (
-              <Grid item xs={12} sm={6} md={3} key={id}>
-                <Card
+          <Grid
+            container
+            spacing={4}
+            justifyContent="center"
+            alignItems="center"
+          >
+            {features.map(({ id, logo, title, description }, index) => {
+              const isLargeScreen = useMediaQuery("(min-width:600px)"); // Screen size check
+              const isActive = isLargeScreen && activeFeature === index;
+
+              return (
+                <Grid
+                  item
+                  xs={12}
+                  sm={6}
+                  md={3}
+                  key={id}
                   sx={{
-                    height: "16rem",
-                    width: "100%",
-                    maxWidth: "300px",
-                    transition: "background-color 0.5s ease, color 0.5s ease",
-                    backgroundColor:
-                      activeFeature === index ? "#4b8b93" : "#ffffff",
-                    color: activeFeature === index ? "white" : "black",
-                    boxShadow: 3,
-                    borderRadius: "10px",
-                    cursor: "pointer",
+                    display: "flex",
+                    justifyContent: "center",
                   }}
                 >
-                  <CardContent
+                  <Card
                     sx={{
-                      textAlign: "center",
-                      padding: 3,
+                      height: "16rem",
+                      width: "100%",
+                      maxWidth: "300px",
+                      transition:
+                        "transform 0.5s ease, background-color 0.5s ease, color 0.5s ease",
+                      backgroundColor: isActive ? "#4b8b93" : "#ffffff",
+                      color: isActive ? "white" : "black",
+                      boxShadow: 3,
+                      borderRadius: "10px",
+                      cursor: "pointer",
+                      transform: isActive ? "scale(1.05)" : "scale(1)",
                     }}
                   >
-                    <Box
+                    <CardContent
                       sx={{
-                        borderRadius: "50%",
-                        padding: 2,
-                        display: "inline-flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        backgroundColor:
-                          activeFeature === index
+                        textAlign: "center",
+                        padding: 3,
+                      }}
+                    >
+                      <Box
+                        sx={{
+                          borderRadius: "50%",
+                          padding: 2,
+                          display: "inline-flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          backgroundColor: isActive
                             ? "white"
                             : "rgb(243, 244, 246)",
-                        transition: "background-color 0.5s ease",
-                      }}
-                    >
-                      {logo}
-                    </Box>
-                    <Typography
-                      variant="h6"
-                      sx={{
-                        fontWeight: "bold",
-                        marginTop: 2,
-                        transition: "color 0.5s ease",
-                        color: activeFeature === index ? "white" : "black",
-                      }}
-                    >
-                      {title}
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      sx={{
-                        marginTop: 1,
-                        transition: "color 0.5s ease",
-                        color: activeFeature === index ? "white" : "gray",
-                      }}
-                    >
-                      {description}
-                    </Typography>
-                  </CardContent>
-                </Card>
-              </Grid>
-            ))}
+                          transition: "background-color 0.5s ease",
+                        }}
+                      >
+                        {logo}
+                      </Box>
+                      <Typography
+                        variant="h6"
+                        sx={{
+                          fontWeight: "bold",
+                          marginTop: 2,
+                          transition: "color 0.5s ease",
+                          color: isActive ? "white" : "black",
+                        }}
+                      >
+                        {title}
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        sx={{
+                          marginTop: 1,
+                          transition: "color 0.5s ease",
+                          color: isActive ? "white" : "gray",
+                        }}
+                      >
+                        {description}
+                      </Typography>
+                    </CardContent>
+                  </Card>
+                </Grid>
+              );
+            })}
           </Grid>
         </Container>
       </section>
-
+      ;
       <section
         id="how-it-works"
         className="bg-cover bg-center bg-no-repeat py-12 lg:h-screen flex justify-center items-center"
@@ -345,6 +364,10 @@ export default function Home() {
                     borderRadius: "10px",
                     width: "90%",
                     maxWidth: "280px",
+                    transition: "transform 0.3s",
+                    "&:hover": {
+                      transform: "scale(1.05)",
+                    },
                   }}
                 >
                   <CardContent className="text-center p-6">
@@ -372,7 +395,6 @@ export default function Home() {
           </Grid>
         </Container>
       </section>
-
       <footer className="bg-[#4b8b93] text-white py-12">
         <Container>
           <div className="text-center mb-6">
