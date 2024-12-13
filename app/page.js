@@ -24,8 +24,19 @@ import {
 } from "@mui/material";
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import JoinWaitlist from "./components/joinWaitlist";
 
 export default function Home() {
+  const [dialogOpen, setDialogOpen] = useState(false);
+
+  const handleOpenDialog = () => {
+    setDialogOpen(true);
+  };
+
+  const handleCloseDialog = () => {
+    setDialogOpen(false);
+  };
+
   const features = [
     {
       id: 1,
@@ -164,6 +175,7 @@ export default function Home() {
                   backgroundColor: "#397a7f",
                 },
               }}
+              onClick={handleOpenDialog}
             >
               Join Waitlist
             </Button>
@@ -215,6 +227,7 @@ export default function Home() {
                     backgroundColor: "#397a7f",
                   },
                 }}
+                onClick={handleOpenDialog}
               >
                 Join Waitlist
               </Button>
@@ -432,6 +445,7 @@ export default function Home() {
                   backgroundColor: "#f3f3f3",
                 },
               }}
+              onClick={handleOpenDialog}
             >
               Join Waitlist
             </Button>
@@ -459,6 +473,7 @@ export default function Home() {
           </div>
         </Container>
       </footer>
+      <JoinWaitlist open={dialogOpen} onClose={handleCloseDialog} />
     </div>
   );
 }
