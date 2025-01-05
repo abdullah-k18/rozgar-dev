@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Brain,
   FileText,
@@ -5,14 +7,36 @@ import {
   Search,
   Upload,
   CircleCheckBig,
-  Linkedin 
+  Linkedin,
 } from "lucide-react";
 import Image from "next/image";
-import { Card, CardContent, Typography, Container, Grid, AppBar, Toolbar, Button } from "@mui/material";
+import { useMediaQuery } from "@mui/material";
+import {
+  Card,
+  CardContent,
+  Typography,
+  Container,
+  Grid,
+  AppBar,
+  Toolbar,
+  Button,
+  Box,
+} from "@mui/material";
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import { BorderRightRounded, Padding } from "@mui/icons-material";
+import JoinWaitlist from "./components/joinWaitlist";
 
 export default function Home() {
+  const [dialogOpen, setDialogOpen] = useState(false);
+
+  const handleOpenDialog = () => {
+    setDialogOpen(true);
+  };
+
+  const handleCloseDialog = () => {
+    setDialogOpen(false);
+  };
+
   const features = [
     {
       id: 1,
@@ -44,6 +68,15 @@ export default function Home() {
     },
   ];
 
+  const [activeFeature, setActiveFeature] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setActiveFeature((prev) => (prev + 1) % features.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [features.length]);
+
   const howItWorks = [
     {
       id: 1,
@@ -66,75 +99,89 @@ export default function Home() {
     },
   ];
 
+  const isLargeScreen = useMediaQuery("(min-width:600px)");
+
   return (
     <div className="bg-white text-gray-800 min-h-screen">
       <AppBar
-      sx={{
-        backgroundColor: "white",
-        color: "black",
-        boxShadow: "none",
-        position: { xs: "relative", lg: "fixed" }, 
-      }}
-      className="border-b "
-    >
-      <Container>
-        <Toolbar disableGutters className="flex justify-between">
-          <Link href="#home" passHref>
-          <Typography
-            variant="h6"
-            component="div"
-            sx={{ fontWeight: "800", fontSize: "1.5rem" }}
-            className="bg-gradient-to-r from-[#4b8b93] to-[#8d5227] text-transparent bg-clip-text cursor-pointer"
-          >
-            ROZGAR
-          </Typography>
-          </Link>
-
-          <div className="sm:flex hidden space-x-6">
+        sx={{
+          backgroundColor: "white",
+          color: "black",
+          boxShadow: "none",
+          position: { xs: "relative", lg: "fixed" },
+        }}
+        className="border-b "
+      >
+        <Container>
+          <Toolbar disableGutters className="flex justify-between">
             <Link href="#home" passHref>
               <Typography
-                variant="body1"
-                className="cursor-pointer hover:underline"
+                variant="h6"
+                component="div"
+                sx={{
+                  fontWeight: "800",
+                  fontSize: "1.5rem",
+                  display: "flex",
+                  alignItems: "center",
+                }}
+                className="bg-black text-transparent bg-clip-text cursor-pointer"
               >
-                Home
+                ROZG
+                <img
+                  src="/logo.png"
+                  alt="Logo"
+                  className="mx-1"
+                  style={{ height: 40 }}
+                />
+                R
               </Typography>
             </Link>
-            <Link href="#features" passHref>
-              <Typography
-                variant="body1"
-                className="cursor-pointer hover:underline"
-              >
-                Features
-              </Typography>
-            </Link>
-            <Link href="#how-it-works" passHref>
-              <Typography
-                variant="body1"
-                className="cursor-pointer hover:underline"
-              >
-                How It Works
-              </Typography>
-            </Link>
-          </div>
 
-          <Button
-            variant="contained"
-            sx={{
-              backgroundColor: "#4b8b93",
-              color: "white",
-              fontWeight: "bold",
-              textTransform: "none",
-              "&:hover": {
-                backgroundColor: "#397a7f",
-              },
-            }}
-          >
-            Join Waitlist
-          </Button>
-        </Toolbar>
-      </Container>
-    </AppBar>
+            <div className="sm:flex hidden space-x-6">
+              <Link href="#home" passHref>
+                <Typography
+                  variant="body1"
+                  className="cursor-pointer hover:underline"
+                >
+                  Home
+                </Typography>
+              </Link>
+              <Link href="#features" passHref>
+                <Typography
+                  variant="body1"
+                  className="cursor-pointer hover:underline"
+                >
+                  Features
+                </Typography>
+              </Link>
+              <Link href="#how-it-works" passHref>
+                <Typography
+                  variant="body1"
+                  className="cursor-pointer hover:underline"
+                >
+                  How It Works
+                </Typography>
+              </Link>
+            </div>
 
+            <Button
+              variant="contained"
+              sx={{
+                backgroundColor: "#4b8b93",
+                color: "white",
+                fontWeight: "bold",
+                textTransform: "none",
+                "&:hover": {
+                  backgroundColor: "#397a7f",
+                },
+              }}
+              onClick={handleOpenDialog}
+            >
+              Join Waitlist
+            </Button>
+          </Toolbar>
+        </Container>
+      </AppBar>
       <section
         id="home"
         className="flex justify-center items-center py-12 mt-12 h-auto lg:h-screen lg:mt-0"
@@ -148,7 +195,7 @@ export default function Home() {
                 sx={{
                   fontSize: { xs: "1.8rem", md: "2.5rem", lg: "3rem" },
                   fontWeight: "bolder",
-                  marginBottom: "1rem"
+                  marginBottom: "1rem",
                 }}
               >
                 Transform Your Job Search with{" "}
@@ -167,9 +214,26 @@ export default function Home() {
                 opportunities while optimizing your career materials for
                 success.
               </Typography>
+
+              <Button
+                variant="contained"
+                sx={{
+                  backgroundColor: "#4b8b93",
+                  color: "white",
+                  fontWeight: "bold",
+                  marginTop: 2,
+                  textTransform: "none",
+                  "&:hover": {
+                    backgroundColor: "#397a7f",
+                  },
+                }}
+                onClick={handleOpenDialog}
+              >
+                Join Waitlist
+              </Button>
             </div>
 
-            <div className="relative w-full h-80 lg:h-96 bg-[#4b8b93] rounded-full">
+            <div className="relative w-full h-80 lg:h-96 rounded-full">
               <Image
                 src="/logo.png"
                 alt="AI Job Search"
@@ -180,16 +244,20 @@ export default function Home() {
           </div>
         </Container>
       </section>
-
       <section
         id="features"
-        className="bg-gray-100 py-12 h-auto lg:h-screen flex justify-center items-center"
+        className="bg-gray-50 py-12 h-auto lg:h-screen flex justify-center items-center"
       >
         <Container>
           <Typography
             variant="h3"
-            className="text-center text-black"
-            sx={{ fontSize: { xs: "2rem", md: "2.5rem", lg: "3rem" }, fontWeight: "bolder", marginBottom: "3.5rem" }}
+            sx={{
+              textAlign: "center",
+              color: "black",
+              fontSize: { xs: "2rem", md: "2.5rem", lg: "3rem" },
+              fontWeight: "bolder",
+              marginBottom: "3.5rem",
+            }}
           >
             Key Features
           </Typography>
@@ -198,40 +266,103 @@ export default function Home() {
             container
             spacing={4}
             justifyContent="center"
-            className="flex-wrap"
+            alignItems="center"
           >
-            {features.map(({ id, logo, title, description }) => (
-              <Grid item xs={12} sm={6} md={3} key={id}>
-                <Card className="bg-white h-60 lg:w-75" sx={{ boxShadow: 3, borderRadius: "lg" }}>
-                  <CardContent className="text-center" sx={{ padding: 3 }}>
-                    {logo}
-                    <Typography
-                      variant="h6"
-                      className="text-black"
-                      sx={{ fontWeight: "bold", marginTop: "1rem" }}
+            {features.map(({ id, logo, title, description }, index) => {
+              const isActive = isLargeScreen && activeFeature === index;
+
+              return (
+                <Grid
+                  item
+                  xs={12}
+                  sm={6}
+                  md={3}
+                  key={id}
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                  }}
+                >
+                  <Card
+                    sx={{
+                      height: "16rem",
+                      width: "100%",
+                      maxWidth: "300px",
+                      transition:
+                        "transform 0.5s ease, background-color 0.5s ease, color 0.5s ease",
+                      backgroundColor: isActive ? "#4b8b93" : "#ffffff",
+                      color: isActive ? "white" : "black",
+                      boxShadow: 3,
+                      borderRadius: "10px",
+                      cursor: "pointer",
+                      transform: isActive ? "scale(1.05)" : "scale(1)",
+                    }}
+                  >
+                    <CardContent
+                      sx={{
+                        textAlign: "center",
+                        padding: 3,
+                      }}
                     >
-                      {title}
-                    </Typography>
-                    <Typography variant="body2" className="text-gray-700" sx={{ marginTop: "1rem"}}>
-                      {description}
-                    </Typography>
-                  </CardContent>
-                </Card>
-              </Grid>
-            ))}
+                      <Box
+                        sx={{
+                          borderRadius: "50%",
+                          padding: 2,
+                          display: "inline-flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          backgroundColor: isActive
+                            ? "white"
+                            : "rgb(243, 244, 246)",
+                          transition: "background-color 0.5s ease",
+                        }}
+                      >
+                        {logo}
+                      </Box>
+                      <Typography
+                        variant="h6"
+                        sx={{
+                          fontWeight: "bold",
+                          marginTop: 2,
+                          transition: "color 0.5s ease",
+                          color: isActive ? "white" : "black",
+                        }}
+                      >
+                        {title}
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        sx={{
+                          marginTop: 1,
+                          transition: "color 0.5s ease",
+                          color: isActive ? "white" : "gray",
+                        }}
+                      >
+                        {description}
+                      </Typography>
+                    </CardContent>
+                  </Card>
+                </Grid>
+              );
+            })}
           </Grid>
         </Container>
       </section>
-
+      ;
       <section
         id="how-it-works"
-        className="bg-white py-12 lg:h-screen flex justify-center items-center"
+        className="bg-cover bg-center bg-no-repeat py-12 lg:h-screen flex justify-center items-center"
+        style={{ backgroundImage: "url('/bg.jpg')" }}
       >
         <Container>
           <Typography
             variant="h3"
             className="text-center text-black mb-12"
-            sx={{ fontSize: { xs: "2rem", md: "2.5rem", lg: "3rem" }, fontWeight: "bolder", marginBottom: "3.5rem" }}
+            sx={{
+              fontSize: { xs: "2rem", md: "2.5rem", lg: "3rem" },
+              fontWeight: "bolder",
+              marginBottom: "3.5rem",
+            }}
           >
             How It Works
           </Typography>
@@ -239,19 +370,36 @@ export default function Home() {
           <Grid container spacing={4} justifyContent="center">
             {howItWorks.map(({ id, logo, title, description }) => (
               <Grid item xs={12} sm={6} md={4} key={id}>
-                <Card className="bg-white h-60" sx={{ boxShadow: "none" }}>
+                <Card
+                  className="h-60 bg-white cursor-pointer mx-auto"
+                  sx={{
+                    boxShadow: 10,
+                    backdropFilter: "blur(1px)",
+                    borderRadius: "10px",
+                    width: "90%",
+                    maxWidth: "280px",
+                    transition: "transform 0.3s",
+                    "&:hover": {
+                      transform: "scale(1.05)",
+                    },
+                  }}
+                >
                   <CardContent className="text-center p-6">
-                    <div className="bg-gray-100 rounded-full p-3 inline-flex justify-center items-center">
+                    <div className="bg-gray-50 rounded-full p-3 inline-flex justify-center items-center">
                       {logo}
                     </div>
                     <Typography
                       variant="h5"
                       className="text-black mt-4"
-                      sx={{ fontWeight: "bold", marginTop: "1rem"}}
+                      sx={{ fontWeight: "bold", marginTop: "1rem" }}
                     >
                       {title}
                     </Typography>
-                    <Typography variant="body1" className="text-gray-700" sx={{marginTop: "1rem"}}>
+                    <Typography
+                      variant="body1"
+                      className="text-gray-700"
+                      sx={{ marginTop: "1rem" }}
+                    >
                       {description}
                     </Typography>
                   </CardContent>
@@ -261,68 +409,71 @@ export default function Home() {
           </Grid>
         </Container>
       </section>
-
       <footer className="bg-[#4b8b93] text-white py-12">
-      <Container>
-        <div className="text-center mb-6">
-          <Typography
-            variant="h4"
-            sx={{ fontSize: { xs: "1.8rem", md: "2.5rem", fontWeight: "bold" } }}
-          >
-            Ready to Transform Your Job Search
-          </Typography>
-        </div>
-
-        <div className="text-center mb-8">
-          <Typography
-            variant="body1"
-            className="text-gray-100"
-            sx={{ fontSize: { xs: "1rem", md: "1.2rem" } }}
-          >
-            Join thousands of successful job seekers who found their dream
-            positions through Rozgar&apos;s AI-powered platform.
-          </Typography>
-        </div>
-
-        <div className="text-center mb-10">
-          <Button
-            variant="contained"
-            sx={{
-              backgroundColor: "#ffffff",
-              color: "#4b8b93",
-              textTransform: "none",
-              fontWeight: "bold",
-              "&:hover": {
-                backgroundColor: "#f3f3f3",
-              },
-            }}
-          >
-            Join Waitlist
-          </Button>
-        </div>
-
-        <div className="flex flex-col sm:flex-row justify-between items-center border-t border-gray-300 pt-6">
-          <Typography
-            variant="body2"
-            className="text-gray-300 text-center sm:text-left"
-            sx={{ marginBottom: "1rem" }}
-          >
-            &copy; 2024 Rozgar. All rights reserved.
-          </Typography>
-
-          <div className="flex items-center space-x-2">
-            <Link
-              href="https://www.linkedin.com/company/rozgar-organization"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-gray-300 hover:text-white"
+        <Container>
+          <div className="text-center mb-6">
+            <Typography
+              variant="h4"
+              sx={{
+                fontSize: { xs: "1.8rem", md: "2.5rem", fontWeight: "bold" },
+              }}
             >
-              <Linkedin size={24} />
-            </Link>
+              Ready to Transform Your Job Search
+            </Typography>
           </div>
-        </div>
-      </Container>
-    </footer>
+
+          <div className="text-center mb-8">
+            <Typography
+              variant="body1"
+              className="text-gray-100"
+              sx={{ fontSize: { xs: "1rem", md: "1.2rem" } }}
+            >
+              Join thousands of successful job seekers who found their dream
+              positions through Rozgar&apos;s AI-powered platform.
+            </Typography>
+          </div>
+
+          <div className="text-center mb-10">
+            <Button
+              variant="contained"
+              sx={{
+                backgroundColor: "#ffffff",
+                color: "#4b8b93",
+                textTransform: "none",
+                fontWeight: "bold",
+                "&:hover": {
+                  backgroundColor: "#f3f3f3",
+                },
+              }}
+              onClick={handleOpenDialog}
+            >
+              Join Waitlist
+            </Button>
+          </div>
+
+          <div className="flex flex-col sm:flex-row justify-between items-center border-t border-gray-300 pt-6">
+            <Typography
+              variant="body2"
+              className="text-gray-300 text-center sm:text-left"
+              sx={{ marginBottom: "1rem" }}
+            >
+              &copy; 2024 Rozgar. All rights reserved.
+            </Typography>
+
+            <div className="flex items-center space-x-2">
+              <Link
+                href="https://www.linkedin.com/company/rozgar-organization"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-300 hover:text-white"
+              >
+                <Linkedin size={24} />
+              </Link>
+            </div>
+          </div>
+        </Container>
+      </footer>
+      <JoinWaitlist open={dialogOpen} onClose={handleCloseDialog} />
     </div>
   );
 }
