@@ -10,6 +10,7 @@ export async function GET(request) {
         const SCRAPING_URL = 'https://embedded-posts.vercel.app/';
         await page.goto(SCRAPING_URL, { waitUntil: 'domcontentloaded' });
 
+        await page.waitForSelector('iframe');
         const iframeElements = await page.$$eval('iframe', frames => frames.map(frame => frame.src));
         console.log('Found iframes:', iframeElements);
 
