@@ -14,46 +14,22 @@ import {
   FormControl,
   InputLabel,
   Button,
+  CircularProgress,
+  Alert,
 } from "@mui/material";
 import { Building2, MapPin, Banknote, Search as SearchIcon } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
-
-const dummyJobs = [
-  {
-    id: 1,
-    title: "Senior Frontend Developer",
-    company: "TechCorp Solutions",
-    location: "Karachi, Pakistan",
-    salary: "150,000 - 250,000 PKR",
-    type: "Full-time",
-    posted: "2 days ago",
-    description: "We are looking for an experienced Frontend Developer with React expertise...",
-  },
-  {
-    id: 2,
-    title: "Product Manager",
-    company: "InnovateX",
-    location: "Lahore, Pakistan",
-    salary: "200,000 - 300,000 PKR",
-    type: "Full-time",
-    posted: "1 day ago",
-    description: "Seeking a dynamic Product Manager to lead our product development initiatives...",
-  },
-  {
-    id: 3,
-    title: "DevOps Engineer",
-    company: "CloudTech Systems",
-    location: "Islamabad, Pakistan",
-    salary: "180,000 - 280,000 PKR",
-    type: "Remote",
-    posted: "3 days ago",
-    description: "Join our DevOps team to build and maintain scalable infrastructure...",
-  },
-];
 
 export default function Jobs() {
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [jobs, setJobs] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [filterOptions, setFilterOptions] = useState({
+    locations: [],
+    salaryRanges: []
+  });
   const [filters, setFilters] = useState({
     search: "",
     location: "",
@@ -64,22 +40,88 @@ export default function Jobs() {
     setDialogOpen(true);
   };
 
+  const fetchFilterOptions = async () => {
+    try {
+      const response = await fetch('/api/jobs/filters');
+      if (!response.ok) throw new Error('Failed to fetch filter options');
+      const data = await response.json();
+      setFilterOptions(data);
+    } catch (err) {
+      console.error('Error fetching filter options:', err);
+    }
+  };
+
+  const fetchJobs = async (filterParams = {}) => {
+    try {
+      setLoading(true);
+      setError(null);
+      
+      const queryParams = new URLSearchParams();
+      if (filterParams.search) queryParams.append('search', filterParams.search);
+      if (filterParams.location) queryParams.append('location', filterParams.location);
+      if (filterParams.salary) {
+        const [min, max] = filterParams.salary.split('-');
+        if (min) queryParams.append('minSalary', min);
+        if (max) queryParams.append('maxSalary', max);
+      }
+
+      const response = await fetch(`/api/jobs?${queryParams.toString()}`);
+      if (!response.ok) throw new Error('Failed to fetch jobs');
+      
+      const data = await response.json();
+      setJobs(data.jobs);
+    } catch (err) {
+      console.error('Error fetching jobs:', err);
+      setError('Failed to load jobs. Please try again later.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleFilterChange = (field) => (event) => {
-    setFilters(prev => ({
-      ...prev,
+    const newFilters = {
+      ...filters,
       [field]: event.target.value
-    }));
+    };
+    setFilters(newFilters);
   };
 
   const handleApplyFilters = () => {
-    // Here you would implement the actual filtering logic
-    console.log("Applying filters:", filters);
+    fetchJobs(filters);
+  };
+
+  useEffect(() => {
+    fetchFilterOptions();
+    fetchJobs();
+  }, []);
+
+  const formatSalary = (min, max) => {
+    if (!min && !max) return "Not specified";
+    if (min && !max) return `${min.toLocaleString()}+ PKR`;
+    if (!min && max) return `Up to ${max.toLocaleString()} PKR`;
+    return `${min.toLocaleString()} - ${max.toLocaleString()} PKR`;
+  };
+
+  const formatWorkType = (job) => {
+    const types = [];
+    if (job.remote) types.push("Remote");
+    if (job.hybrid) types.push("Hybrid");
+    if (job.on_site) types.push("On-site");
+    return types.join(" / ") || "Not specified";
+  };
+
+  const formatExperience = (min, max) => {
+    if (min === 0 && (!max || max === 0)) return "Fresh";
+    if (!min && !max) return "Not specified";
+    if (min && !max) return `${min}+ years`;
+    if (!min && max) return `Up to ${max} years`;
+    return `${min} - ${max} years`;
   };
 
   return (
     <div className="bg-white text-gray-800 min-h-screen">
       <Navbar handleOpenDialog={handleOpenDialog} />
-      <Box sx={{ height: { xs: "4rem", lg: "5rem" } }} /> {/* Spacer for navbar */}
+      <Box sx={{ height: { xs: "4rem", lg: "5rem" } }} />
       <Container maxWidth="lg" sx={{ py: 4 }}>
         {/* Filters Section */}
         <Card sx={{ mb: 4, p: 3 }}>
@@ -101,14 +143,14 @@ export default function Jobs() {
               <FormControl fullWidth>
                 <InputLabel>Location</InputLabel>
                 <Select 
-                  label="Location" 
+                  label="Location"
                   value={filters.location}
                   onChange={handleFilterChange('location')}
                 >
                   <MenuItem value="">All Locations</MenuItem>
-                  <MenuItem value="karachi">Karachi</MenuItem>
-                  <MenuItem value="lahore">Lahore</MenuItem>
-                  <MenuItem value="islamabad">Islamabad</MenuItem>
+                  {filterOptions.locations.map((location) => (
+                    <MenuItem key={location} value={location}>{location}</MenuItem>
+                  ))}
                 </Select>
               </FormControl>
             </Grid>
@@ -116,14 +158,16 @@ export default function Jobs() {
               <FormControl fullWidth>
                 <InputLabel>Salary Range</InputLabel>
                 <Select 
-                  label="Salary Range" 
+                  label="Salary Range"
                   value={filters.salary}
                   onChange={handleFilterChange('salary')}
                 >
                   <MenuItem value="">All Ranges</MenuItem>
-                  <MenuItem value="0-100k">0 - 100,000 PKR</MenuItem>
-                  <MenuItem value="100k-200k">100,000 - 200,000 PKR</MenuItem>
-                  <MenuItem value="200k+">200,000+ PKR</MenuItem>
+                  {filterOptions.salaryRanges.map((range) => (
+                    <MenuItem key={range.value} value={range.value}>
+                      {range.label}
+                    </MenuItem>
+                  ))}
                 </Select>
               </FormControl>
             </Grid>
@@ -134,7 +178,7 @@ export default function Jobs() {
                 onClick={handleApplyFilters}
                 sx={{
                   backgroundColor: "#4b8b93",
-                  height: "56px", // Match height with other inputs
+                  height: "56px",
                   "&:hover": {
                     backgroundColor: "#3d7179",
                   },
@@ -146,71 +190,103 @@ export default function Jobs() {
           </Grid>
         </Card>
 
-        {/* Jobs List */}
-        <Grid container spacing={3}>
-          {dummyJobs.map((job) => (
-            <Grid item xs={12} key={job.id}>
-              <Card 
-                sx={{ 
-                  '&:hover': {
-                    boxShadow: 6,
-                    cursor: 'pointer'
-                  }
-                }}
-              >
-                <CardContent>
-                  <Grid container spacing={2}>
-                    <Grid item xs={12}>
-                      <Typography variant="h6" component="h2" color="#4b8b93">
-                        {job.title}
-                      </Typography>
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 1 }}>
-                        <Building2 size={18} />
-                        <Typography variant="body2" color="text.secondary">
-                          {job.company}
-                        </Typography>
-                      </Box>
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 1 }}>
-                        <MapPin size={18} />
-                        <Typography variant="body2" color="text.secondary">
-                          {job.location}
-                        </Typography>
-                      </Box>
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 1 }}>
-                        <Banknote size={18} />
-                        <Typography variant="body2" color="text.secondary">
-                          {job.salary}
-                        </Typography>
-                      </Box>
-                    </Grid>
-                    <Grid item xs={12}>
-                      <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-                        {job.description}
-                      </Typography>
-                    </Grid>
-                    <Grid item xs={12}>
-                      <Box sx={{ display: 'flex', gap: 1, mt: 1 }}>
-                        <Chip 
-                          label={job.type} 
-                          size="small" 
-                          sx={{ 
-                            backgroundColor: '#4b8b93',
-                            color: 'white'
-                          }}
-                        />
-                        <Chip 
-                          label={job.posted} 
-                          size="small" 
-                          variant="outlined"
-                        />
-                      </Box>
-                    </Grid>
-                  </Grid>
-                </CardContent>
-              </Card>
-            </Grid>
-          ))}
-        </Grid>
+        {/* Error Message */}
+        {error && (
+          <Alert severity="error" sx={{ mb: 4 }}>
+            {error}
+          </Alert>
+        )}
+
+        {/* Loading State */}
+        {loading ? (
+          <Box sx={{ display: 'flex', justifyContent: 'center', my: 4 }}>
+            <CircularProgress sx={{ color: "#4b8b93" }} />
+          </Box>
+        ) : (
+          /* Jobs List */
+          <Grid container spacing={3}>
+            {jobs.length === 0 ? (
+              <Grid item xs={12}>
+                <Alert severity="info">
+                  No jobs found matching your criteria.
+                </Alert>
+              </Grid>
+            ) : (
+              jobs.map((job) => (
+                <Grid item xs={12} key={job._id}>
+                  <Card 
+                    sx={{ 
+                      '&:hover': {
+                        boxShadow: 6,
+                        cursor: 'pointer'
+                      }
+                    }}
+                  >
+                    <CardContent>
+                      <Grid container spacing={2}>
+                        <Grid item xs={12}>
+                          <Typography variant="h6" component="h2" color="#4b8b93">
+                            {job.title}
+                          </Typography>
+                          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 1 }}>
+                            <Building2 size={18} />
+                            <Typography variant="body2" color="text.secondary">
+                              {job.company_name}
+                            </Typography>
+                          </Box>
+                          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 1 }}>
+                            <MapPin size={18} />
+                            <Typography variant="body2" color="text.secondary">
+                              {job.location} • {formatWorkType(job)}
+                            </Typography>
+                          </Box>
+                          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 1 }}>
+                            <Banknote size={18} />
+                            <Typography variant="body2" color="text.secondary">
+                              {formatSalary(job.min_salary, job.max_salary)}
+                            </Typography>
+                          </Box>
+                        </Grid>
+                        <Grid item xs={12}>
+                          <Typography variant="body2" color="text.secondary">
+                            {job.description}
+                          </Typography>
+                        </Grid>
+                        <Grid item xs={12}>
+                          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mt: 1 }}>
+                            <Chip 
+                              label={formatExperience(job.min_exp_in_years, job.max_exp_in_years)}
+                              size="small"
+                              sx={{ 
+                                backgroundColor: '#4b8b93',
+                                color: 'white'
+                              }}
+                            />
+                            {job.tags.slice(0, 5).map((tag, index) => (
+                              <Chip 
+                                key={index}
+                                label={tag}
+                                size="small"
+                                variant="outlined"
+                              />
+                            ))}
+                            {job.tags.length > 5 && (
+                              <Chip 
+                                label={`+${job.tags.length - 5} more`}
+                                size="small"
+                                variant="outlined"
+                              />
+                            )}
+                          </Box>
+                        </Grid>
+                      </Grid>
+                    </CardContent>
+                  </Card>
+                </Grid>
+              ))
+            )}
+          </Grid>
+        )}
       </Container>
     </div>
   );
