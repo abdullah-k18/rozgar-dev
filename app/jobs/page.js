@@ -35,6 +35,7 @@ export default function Jobs() {
     location: "",
     salary: "",
   });
+  const [expandedSkills, setExpandedSkills] = useState({});
 
   const handleOpenDialog = () => {
     setDialogOpen(true);
@@ -88,6 +89,13 @@ export default function Jobs() {
 
   const handleApplyFilters = () => {
     fetchJobs(filters);
+  };
+
+  const toggleSkillsExpansion = (jobId) => {
+    setExpandedSkills(prev => ({
+      ...prev,
+      [jobId]: !prev[jobId]
+    }));
   };
 
   useEffect(() => {
@@ -253,31 +261,66 @@ export default function Jobs() {
                           </Typography>
                         </Grid>
                         <Grid item xs={12}>
-                          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mt: 1 }}>
-                            <Chip 
-                              label={formatExperience(job.min_exp_in_years, job.max_exp_in_years)}
-                              size="small"
-                              sx={{ 
-                                backgroundColor: '#4b8b93',
-                                color: 'white'
-                              }}
-                            />
-                            {job.tags.slice(0, 5).map((tag, index) => (
+                          <Typography variant="subtitle2" color="#4b8b93" sx={{ mb: 1 }}>
+                            Required Skills:
+                          </Typography>
+                          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+                            {job.required_skills.slice(0, expandedSkills[job._id] ? undefined : 5).map((skill, index) => (
                               <Chip 
                                 key={index}
-                                label={tag}
+                                label={skill}
                                 size="small"
-                                variant="outlined"
+                                sx={{ 
+                                  backgroundColor: '#4b8b93',
+                                  color: 'white'
+                                }}
                               />
                             ))}
-                            {job.tags.length > 5 && (
+                            {!expandedSkills[job._id] && job.required_skills.length > 5 && (
                               <Chip 
-                                label={`+${job.tags.length - 5} more`}
+                                label={`+${job.required_skills.length - 5} more`}
                                 size="small"
-                                variant="outlined"
+                                onClick={() => toggleSkillsExpansion(job._id)}
+                                sx={{
+                                  cursor: 'pointer',
+                                  '&:hover': {
+                                    backgroundColor: '#3d7179',
+                                    color: 'white'
+                                  }
+                                }}
+                              />
+                            )}
+                            {expandedSkills[job._id] && (
+                              <Chip 
+                                label="Show less"
+                                size="small"
+                                onClick={() => toggleSkillsExpansion(job._id)}
+                                sx={{
+                                  cursor: 'pointer',
+                                  '&:hover': {
+                                    backgroundColor: '#3d7179',
+                                    color: 'white'
+                                  }
+                                }}
                               />
                             )}
                           </Box>
+                        </Grid>
+                        <Grid item xs={12}>
+                          <Typography variant="subtitle2" color="#4b8b93" sx={{ mb: 1 }}>
+                            Experience Required:
+                          </Typography>
+                          <Typography variant="body2" color="text.secondary">
+                            {formatExperience(job.min_exp_in_years, job.max_exp_in_years)}
+                          </Typography>
+                        </Grid>
+                        <Grid item xs={12}>
+                          <Typography variant="subtitle2" color="#4b8b93" sx={{ mb: 1 }}>
+                            How to Apply:
+                          </Typography>
+                          <Typography variant="body2" color="text.secondary">
+                            {job.where_to_apply}
+                          </Typography>
                         </Grid>
                       </Grid>
                     </CardContent>

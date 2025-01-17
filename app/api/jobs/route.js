@@ -14,33 +14,47 @@ export async function GET(request) {
     const maxSalary = searchParams.get('maxSalary');
     const search = searchParams.get('search');
     
-    let query = { status: 'active' };
+    let query = {};
     
-    // Add filters if they exist
+    // Add filters if provided
     if (location) {
-      query.location = location;
+      query.location = { $regex: new RegExp(location, 'i') }; // Case-insensitive location search
     }
-    
     if (minSalary) {
       query.min_salary = { $gte: parseInt(minSalary) };
     }
-    
     if (maxSalary) {
       query.max_salary = { $lte: parseInt(maxSalary) };
     }
-    
     if (search) {
-      query.$text = { $search: search };
+      query.$or = [
+        { title: { $regex: new RegExp(search, 'i') } },
+        { description: { $regex: new RegExp(search, 'i') } },
+        { company_name: { $regex: new RegExp(search, 'i') } },
+        { tags: { $in: [new RegExp(search, 'i')] } },
+        { required_skills: { $in: [new RegExp(search, 'i')] } }
+      ];
     }
-    
+
     const skip = (page - 1) * limit;
     
+    // Sort by createdAt if available, otherwise by _id
+    const sortQuery = { $sort: { createdAt: -1, _id: -1 } };
+    
     const [jobs, total] = await Promise.all([
-      Job.find(query)
-        .sort({ posted_at: -1 })
-        .skip(skip)
-        .limit(limit)
-        .lean(),
+      Job.aggregate([
+        { $match: query },
+        sortQuery,
+        { $skip: skip },
+        { $limit: limit },
+        {
+          $addFields: {
+            createdAt: {
+              $ifNull: ['$createdAt', '$_id']
+            }
+          }
+        }
+      ]),
       Job.countDocuments(query)
     ]);
     
@@ -52,9 +66,8 @@ export async function GET(request) {
         pages: Math.ceil(total / limit)
       }
     });
-    
   } catch (error) {
-    console.error('Error in GET /api/jobs:', error);
+    console.error('Error fetching jobs:', error);
     return NextResponse.json(
       { error: 'Internal Server Error' },
       { status: 500 }
