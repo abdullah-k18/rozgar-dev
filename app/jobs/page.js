@@ -104,7 +104,7 @@ export default function Jobs() {
   }, []);
 
   const formatSalary = (min, max) => {
-    if (!min && !max) return "Not specified";
+    if (!min && !max) return "Salary not mentioned";
     if (min && !max) return `${min.toLocaleString()}+ PKR`;
     if (!min && max) return `Up to ${max.toLocaleString()} PKR`;
     return `${min.toLocaleString()} - ${max.toLocaleString()} PKR`;
@@ -115,15 +115,27 @@ export default function Jobs() {
     if (job.remote) types.push("Remote");
     if (job.hybrid) types.push("Hybrid");
     if (job.on_site) types.push("On-site");
-    return types.join(" / ") || "Not specified";
+    return types.join(" / ") || "Work type not specified";
   };
 
   const formatExperience = (min, max) => {
-    if (min === 0 && (!max || max === 0)) return "Fresh";
-    if (!min && !max) return "Not specified";
+    if (min === 0 && (!max || max === 0)) return "Fresh / No experience required";
+    if (!min && !max) return "Experience requirement not specified";
     if (min && !max) return `${min}+ years`;
     if (!min && max) return `Up to ${max} years`;
     return `${min} - ${max} years`;
+  };
+
+  const getEmptyMessage = (field) => {
+    const messages = {
+      description: "No description provided",
+      location: "Location not specified",
+      company_name: "Company name not provided",
+      required_skills: "No specific skills mentioned",
+      qualifications: "Qualifications not specified",
+      where_to_apply: "Application instructions not provided"
+    };
+    return messages[field] || "Not specified";
   };
 
   return (
@@ -234,18 +246,18 @@ export default function Jobs() {
                       <Grid container spacing={2}>
                         <Grid item xs={12}>
                           <Typography variant="h6" component="h2" color="#4b8b93">
-                            {job.title}
+                            {job.title || "Position not specified"}
                           </Typography>
                           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 1 }}>
                             <Building2 size={18} />
                             <Typography variant="body2" color="text.secondary">
-                              {job.company_name}
+                              {job.company_name || getEmptyMessage('company_name')}
                             </Typography>
                           </Box>
                           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 1 }}>
                             <MapPin size={18} />
                             <Typography variant="body2" color="text.secondary">
-                              {job.location} • {formatWorkType(job)}
+                              {job.location || getEmptyMessage('location')} • {formatWorkType(job)}
                             </Typography>
                           </Box>
                           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 1 }}>
@@ -257,54 +269,60 @@ export default function Jobs() {
                         </Grid>
                         <Grid item xs={12}>
                           <Typography variant="body2" color="text.secondary">
-                            {job.description}
+                            {job.description || getEmptyMessage('description')}
                           </Typography>
                         </Grid>
                         <Grid item xs={12}>
                           <Typography variant="subtitle2" color="#4b8b93" sx={{ mb: 1 }}>
                             Required Skills:
                           </Typography>
-                          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-                            {job.required_skills.slice(0, expandedSkills[job._id] ? undefined : 5).map((skill, index) => (
-                              <Chip 
-                                key={index}
-                                label={skill}
-                                size="small"
-                                sx={{ 
-                                  backgroundColor: '#4b8b93',
-                                  color: 'white'
-                                }}
-                              />
-                            ))}
-                            {!expandedSkills[job._id] && job.required_skills.length > 5 && (
-                              <Chip 
-                                label={`+${job.required_skills.length - 5} more`}
-                                size="small"
-                                onClick={() => toggleSkillsExpansion(job._id)}
-                                sx={{
-                                  cursor: 'pointer',
-                                  '&:hover': {
-                                    backgroundColor: '#3d7179',
+                          {job.required_skills && job.required_skills.length > 0 ? (
+                            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+                              {job.required_skills.slice(0, expandedSkills[job._id] ? undefined : 5).map((skill, index) => (
+                                <Chip 
+                                  key={index}
+                                  label={skill}
+                                  size="small"
+                                  sx={{ 
+                                    backgroundColor: '#4b8b93',
                                     color: 'white'
-                                  }
-                                }}
-                              />
-                            )}
-                            {expandedSkills[job._id] && (
-                              <Chip 
-                                label="Show less"
-                                size="small"
-                                onClick={() => toggleSkillsExpansion(job._id)}
-                                sx={{
-                                  cursor: 'pointer',
-                                  '&:hover': {
-                                    backgroundColor: '#3d7179',
-                                    color: 'white'
-                                  }
-                                }}
-                              />
-                            )}
-                          </Box>
+                                  }}
+                                />
+                              ))}
+                              {!expandedSkills[job._id] && job.required_skills.length > 5 && (
+                                <Chip 
+                                  label={`+${job.required_skills.length - 5} more`}
+                                  size="small"
+                                  onClick={() => toggleSkillsExpansion(job._id)}
+                                  sx={{
+                                    cursor: 'pointer',
+                                    '&:hover': {
+                                      backgroundColor: '#3d7179',
+                                      color: 'white'
+                                    }
+                                  }}
+                                />
+                              )}
+                              {expandedSkills[job._id] && (
+                                <Chip 
+                                  label="Show less"
+                                  size="small"
+                                  onClick={() => toggleSkillsExpansion(job._id)}
+                                  sx={{
+                                    cursor: 'pointer',
+                                    '&:hover': {
+                                      backgroundColor: '#3d7179',
+                                      color: 'white'
+                                    }
+                                  }}
+                                />
+                              )}
+                            </Box>
+                          ) : (
+                            <Typography variant="body2" color="text.secondary">
+                              {getEmptyMessage('required_skills')}
+                            </Typography>
+                          )}
                         </Grid>
                         <Grid item xs={12}>
                           <Typography variant="subtitle2" color="#4b8b93" sx={{ mb: 1 }}>
@@ -316,10 +334,18 @@ export default function Jobs() {
                         </Grid>
                         <Grid item xs={12}>
                           <Typography variant="subtitle2" color="#4b8b93" sx={{ mb: 1 }}>
+                            Qualifications:
+                          </Typography>
+                          <Typography variant="body2" color="text.secondary">
+                            {job.qualifications || getEmptyMessage('qualifications')}
+                          </Typography>
+                        </Grid>
+                        <Grid item xs={12}>
+                          <Typography variant="subtitle2" color="#4b8b93" sx={{ mb: 1 }}>
                             How to Apply:
                           </Typography>
                           <Typography variant="body2" color="text.secondary">
-                            {job.where_to_apply}
+                            {job.where_to_apply || getEmptyMessage('where_to_apply')}
                           </Typography>
                         </Grid>
                       </Grid>
