@@ -25,6 +25,7 @@ import {
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import JoinWaitlist from "./components/joinWaitlist";
+import Navbar from "./components/Navbar";
 
 export default function Home() {
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -103,85 +104,7 @@ export default function Home() {
 
   return (
     <div className="bg-white text-gray-800 min-h-screen">
-      <AppBar
-        sx={{
-          backgroundColor: "white",
-          color: "black",
-          boxShadow: "none",
-          position: { xs: "relative", lg: "fixed" },
-        }}
-        className="border-b "
-      >
-        <Container>
-          <Toolbar disableGutters className="flex justify-between">
-            <Link href="#home" passHref>
-              <Typography
-                variant="h6"
-                component="div"
-                sx={{
-                  fontWeight: "800",
-                  fontSize: "1.5rem",
-                  display: "flex",
-                  alignItems: "center",
-                }}
-                className="bg-black text-transparent bg-clip-text cursor-pointer"
-              >
-                ROZG
-                <img
-                  src="/logo.png"
-                  alt="Logo"
-                  className="mx-1"
-                  style={{ height: 40 }}
-                />
-                R
-              </Typography>
-            </Link>
-
-            <div className="sm:flex hidden space-x-6">
-              <Link href="#home" passHref>
-                <Typography
-                  variant="body1"
-                  className="cursor-pointer hover:underline"
-                >
-                  Home
-                </Typography>
-              </Link>
-              <Link href="#features" passHref>
-                <Typography
-                  variant="body1"
-                  className="cursor-pointer hover:underline"
-                >
-                  Features
-                </Typography>
-              </Link>
-              <Link href="#how-it-works" passHref>
-                <Typography
-                  variant="body1"
-                  className="cursor-pointer hover:underline"
-                >
-                  How It Works
-                </Typography>
-              </Link>
-            </div>
-
-            <Button
-              variant="contained"
-              sx={{
-                backgroundColor: "#4b8b93",
-                color: "white",
-                fontWeight: "bold",
-                textTransform: "none",
-                "&:hover": {
-                  backgroundColor: "#397a7f",
-                },
-              }}
-              onClick={handleOpenDialog}
-            >
-              Join Waitlist
-            </Button>
-          </Toolbar>
-        </Container>
-      </AppBar>
+      <Navbar handleOpenDialog={handleOpenDialog} />
       <section
         id="home"
         className="flex justify-center items-center py-12 mt-12 h-auto lg:h-screen lg:mt-0"
