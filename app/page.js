@@ -24,20 +24,9 @@ import {
 } from "@mui/material";
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import JoinWaitlist from "./components/joinWaitlist";
 import Navbar from "./components/Navbar";
 
 export default function Home() {
-  const [dialogOpen, setDialogOpen] = useState(false);
-
-  const handleOpenDialog = () => {
-    setDialogOpen(true);
-  };
-
-  const handleCloseDialog = () => {
-    setDialogOpen(false);
-  };
-
   const features = [
     {
       id: 1,
@@ -104,7 +93,7 @@ export default function Home() {
 
   return (
     <div className="bg-white text-gray-800 min-h-screen">
-      <Navbar handleOpenDialog={handleOpenDialog} />
+      <Navbar />
       <section
         id="home"
         className="flex justify-center items-center py-12 mt-12 h-auto lg:h-screen lg:mt-0"
@@ -138,6 +127,7 @@ export default function Home() {
                 success.
               </Typography>
 
+              <Link href="/jobs" passHref>
               <Button
                 variant="contained"
                 sx={{
@@ -150,10 +140,10 @@ export default function Home() {
                     backgroundColor: "#397a7f",
                   },
                 }}
-                onClick={handleOpenDialog}
               >
-                Join Waitlist
+                Explore Jobs
               </Button>
+              </Link>
             </div>
 
             <div className="relative w-full h-80 lg:h-96 rounded-full">
@@ -356,24 +346,6 @@ export default function Home() {
             </Typography>
           </div>
 
-          <div className="text-center mb-10">
-            <Button
-              variant="contained"
-              sx={{
-                backgroundColor: "#ffffff",
-                color: "#4b8b93",
-                textTransform: "none",
-                fontWeight: "bold",
-                "&:hover": {
-                  backgroundColor: "#f3f3f3",
-                },
-              }}
-              onClick={handleOpenDialog}
-            >
-              Join Waitlist
-            </Button>
-          </div>
-
           <div className="flex flex-col sm:flex-row justify-between items-center border-t border-gray-300 pt-6">
             <Typography
               variant="body2"
@@ -396,7 +368,6 @@ export default function Home() {
           </div>
         </Container>
       </footer>
-      <JoinWaitlist open={dialogOpen} onClose={handleCloseDialog} />
     </div>
   );
 }
