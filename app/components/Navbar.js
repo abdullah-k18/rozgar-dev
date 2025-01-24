@@ -8,10 +8,8 @@ import {
   Container,
 } from "@mui/material";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 
-export default function Navbar({ handleOpenDialog }) {
-  const pathname = usePathname();
+export default function Navbar() {
 
   return (
     <AppBar
@@ -53,7 +51,6 @@ export default function Navbar({ handleOpenDialog }) {
               <Typography
                 variant="body1"
                 sx={{
-                  color: pathname === "/" ? "#4b8b93" : "inherit",
                   "&:hover": { color: "#4b8b93" },
                 }}
                 className="cursor-pointer"
@@ -79,22 +76,9 @@ export default function Navbar({ handleOpenDialog }) {
                 How It Works
               </Typography>
             </Link>
-            <Link href="/jobs" className="no-underline">
-              <Typography
-                variant="body1"
-                sx={{
-                  color: pathname === "/jobs" ? "#4b8b93" : "inherit",
-                  "&:hover": { color: "#4b8b93" },
-                }}
-                className="cursor-pointer"
-              >
-                Jobs
-              </Typography>
-            </Link>
-            {handleOpenDialog && (
+            <Link href="/jobs" passHref>
               <Button
                 variant="contained"
-                onClick={handleOpenDialog}
                 sx={{
                   backgroundColor: "#4b8b93",
                   "&:hover": {
@@ -103,9 +87,9 @@ export default function Navbar({ handleOpenDialog }) {
                   ml: 2,
                 }}
               >
-                Join Waitlist
+                Jobs
               </Button>
-            )}
+              </Link>
           </div>
         </Toolbar>
       </Container>
