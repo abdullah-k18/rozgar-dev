@@ -1,16 +1,9 @@
 "use client";
 
-import {
-  AppBar,
-  Toolbar,
-  Typography,
-  Button,
-  Container,
-} from "@mui/material";
+import { AppBar, Toolbar, Typography, Button, Container } from "@mui/material";
 import Link from "next/link";
 
 export default function Navbar() {
-
   return (
     <AppBar
       sx={{
@@ -24,7 +17,8 @@ export default function Navbar() {
       <Container>
         <Toolbar disableGutters className="flex justify-between items-center">
           <Link href="/" className="no-underline">
-            <Typography
+          <img src="/navbar.svg" alt="Header Logo" className="h-8" />
+          {/* <Typography
               variant="h6"
               component="div"
               sx={{
@@ -35,15 +29,14 @@ export default function Navbar() {
               }}
               className="bg-black text-transparent bg-clip-text cursor-pointer"
             >
-              ROZG
               <img
-                src="/logo.png"
+                src="/icon.png"
                 alt="Logo"
                 className="mx-1"
-                style={{ height: 40 }}
+                style={{ height: 30 }}
               />
-              R
-            </Typography>
+              ROZGAR
+            </Typography> */}
           </Link>
 
           <div className="hidden sm:flex items-center gap-6">
@@ -51,6 +44,7 @@ export default function Navbar() {
               <Typography
                 variant="body1"
                 sx={{
+                  fontWeight: "bold",
                   "&:hover": { color: "#4b8b93" },
                 }}
                 className="cursor-pointer"
@@ -61,7 +55,7 @@ export default function Navbar() {
             <Link href="/#features" className="no-underline">
               <Typography
                 variant="body1"
-                sx={{ "&:hover": { color: "#4b8b93" } }}
+                sx={{ fontWeight: "bold", "&:hover": { color: "#4b8b93" } }}
                 className="cursor-pointer text-black"
               >
                 Features
@@ -70,7 +64,7 @@ export default function Navbar() {
             <Link href="/#how-it-works" className="no-underline">
               <Typography
                 variant="body1"
-                sx={{ "&:hover": { color: "#4b8b93" } }}
+                sx={{ fontWeight: "bold", "&:hover": { color: "#4b8b93" } }}
                 className="cursor-pointer text-black"
               >
                 How It Works
@@ -81,6 +75,7 @@ export default function Navbar() {
                 variant="contained"
                 sx={{
                   backgroundColor: "#4b8b93",
+                  fontWeight: "bold",
                   "&:hover": {
                     backgroundColor: "#3d7179",
                   },
@@ -89,7 +84,7 @@ export default function Navbar() {
               >
                 Jobs
               </Button>
-              </Link>
+            </Link>
           </div>
         </Toolbar>
       </Container>

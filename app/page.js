@@ -135,6 +135,7 @@ export default function Home() {
                   color: "white",
                   fontWeight: "bold",
                   marginTop: 2,
+                  marginRight: 2,
                   textTransform: "none",
                   "&:hover": {
                     backgroundColor: "#397a7f",
@@ -142,6 +143,24 @@ export default function Home() {
                 }}
               >
                 Explore Jobs
+              </Button>
+              </Link>
+
+              <Link href="/ats" passHref>
+              <Button
+                variant="outlined"
+                sx={{
+                  color: "#4b8b93",
+                  fontWeight: "bold",
+                  marginTop: 2,
+                  textTransform: "none",
+                  transition: "transform 0.3s",
+                  "&:hover": {
+                    transform: "scale(1.05)",
+                  },
+                }}
+              >
+                ATS Score
               </Button>
               </Link>
             </div>
