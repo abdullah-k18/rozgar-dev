@@ -7,12 +7,11 @@ export default function Navbar() {
   return (
     <AppBar
       sx={{
-        backgroundColor: "white",
+        backgroundColor: "#f9fafb",
         color: "black",
         boxShadow: "none",
         position: { xs: "relative", lg: "fixed" },
       }}
-      className="border-b"
     >
       <Container>
         <Toolbar disableGutters className="flex justify-between items-center">

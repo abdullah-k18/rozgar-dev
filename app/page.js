@@ -92,11 +92,14 @@ export default function Home() {
   const isLargeScreen = useMediaQuery("(min-width:600px)");
 
   return (
-    <div className="bg-white text-gray-800 min-h-screen">
+    <div className="bg-white text-gray-50 min-h-screen">
       <Navbar />
       <section
         id="home"
-        className="flex justify-center items-center py-12 mt-12 h-auto lg:h-screen lg:mt-0"
+        className="flex justify-center items-center py-12 h-auto lg:h-screen lg:mt-0"
+        style={{
+          backgroundImage: "url('/bg1.jpg')",
+        }}
       >
         <Container>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
