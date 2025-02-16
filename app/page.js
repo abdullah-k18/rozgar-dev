@@ -17,8 +17,6 @@ import {
   Typography,
   Container,
   Grid,
-  AppBar,
-  Toolbar,
   Button,
   Box,
 } from "@mui/material";
@@ -168,7 +166,7 @@ export default function Home() {
               </Link>
             </div>
 
-            <div className="relative w-full h-80 lg:h-96 rounded-full">
+            <div className="relative w-full h-80 lg:h-96 rounded-full hidden lg:block">
               <Image
                 src="/logo.png"
                 alt="AI Job Search"
@@ -179,6 +177,7 @@ export default function Home() {
           </div>
         </Container>
       </section>
+
       <section
         id="features"
         className="bg-gray-50 py-12 h-auto lg:h-screen flex justify-center items-center"
@@ -201,7 +200,7 @@ export default function Home() {
             container
             spacing={4}
             justifyContent="center"
-            alignItems="center"
+            alignItems="stretch"
           >
             {features.map(({ id, logo, title, description }, index) => {
               const isActive = isLargeScreen && activeFeature === index;
@@ -220,7 +219,8 @@ export default function Home() {
                 >
                   <Card
                     sx={{
-                      height: "16rem",
+                      minHeight: "16rem",
+                      heght: "100%",
                       width: "100%",
                       maxWidth: "300px",
                       transition:
@@ -234,9 +234,15 @@ export default function Home() {
                     }}
                   >
                     <CardContent
-                      sx={{
-                        textAlign: "center",
-                        padding: 3,
+                      sx={{ // Ensures content stacks vertically
+                        display: "flex",        
+    flexDirection: "column", 
+    justifyContent: "center", 
+    alignItems: "center",    
+    textAlign: "center",      
+    height: "100%",
+    paddingRight: 1,
+    paddingLeft: 1
                       }}
                     >
                       <Box
